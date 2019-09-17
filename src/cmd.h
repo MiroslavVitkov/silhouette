@@ -26,6 +26,13 @@ struct NoOp : Base
 };
 
 
+// camera -> detect faces -> play video
+struct CamDetectShow : Base
+{
+    void execute() override;
+};
+
+
 }  // namespace cmd
 
 
