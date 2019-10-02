@@ -15,7 +15,7 @@ namespace cmd
 void CamDetectShow::execute()
 {
     io::Camera cam{ io::Mode::_colour };
-    io::VideoPlayer player{ "faces" };
+    io::VideoPlayer player{ "pedestrians" };
     cv::Mat frame;
     std::vector< cv::Rect > rects;
     std::vector< double > weights;

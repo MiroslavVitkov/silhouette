@@ -12,6 +12,13 @@ namespace cli
 {
 
 
+std::unique_ptr< cmd::Base > help( const cv::CommandLineParser & parser )
+{
+    parser.printMessage();
+    return std::make_unique< cmd::NoOp >();
+}
+
+
 std::unique_ptr<cmd::Base> parse( int argc, Argv argv )
 {
     const std::string keys =
@@ -23,8 +30,7 @@ std::unique_ptr<cmd::Base> parse( int argc, Argv argv )
 
     if( parser.has( "help" ) )
     {
-        parser.printMessage();
-        return std::make_unique<cmd::NoOp>();
+        return help( parser );
     }
 
     if( parser.has( "detect" ) )
@@ -32,7 +38,7 @@ std::unique_ptr<cmd::Base> parse( int argc, Argv argv )
         return std::make_unique< cmd::CamDetectShow >();
     }
 
-    return std::make_unique<cmd::NoOp>();
+    return help( parser );
 }
 
 

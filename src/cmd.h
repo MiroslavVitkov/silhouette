@@ -26,7 +26,7 @@ struct NoOp : Base
 };
 
 
-// camera -> detect faces -> play video
+// camera -> detect pedestrians -> play video
 struct CamDetectShow : Base
 {
     void execute() override;
