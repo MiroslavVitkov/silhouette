@@ -9,7 +9,7 @@
 
 
 \bibliography{report}
-\title{Human identification via gait in unconstrained videos}
+\title{Human silhouette segmentation in unconstrained videos}
 \author{Miroslav Vitkov \\ sir.vorac@gmail.com}
 
 
@@ -19,8 +19,10 @@
 
 \begin{abstract}
 Gait is a prominent biometric with similar importance to face recognition.
-The latter is feasable in the presence of heavy noise and can utilize inexpensive equipment.
-This report explores the feasability of the former when subjected to the same constraints.
+It is feasable in the presence of heavy noise like darkness or low quality cameras.
+The input to the recogniser algorithm is usually a segmented and deshadowed human silhouette.
+This report presents an implementation of the segmentation step.
+We use Histogram of Oriented Gradients for dimensionality reduction  and a Support Vector Machine for pixel classification.
 \end{abstract}
 
 
