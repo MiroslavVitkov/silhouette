@@ -22,7 +22,7 @@ Gait is a prominent biometric with similar importance to face recognition.
 It is feasable in the presence of heavy noise like darkness or low quality cameras.
 The input to the recogniser algorithm is usually a segmented and deshadowed human silhouette.
 This report presents an implementation of the segmentation step.
-We use Histogram of Oriented Gradients for dimensionality reduction  and a Support Vector Machine for pixel classification.
+We use Histogram of Oriented Gradients for dimensionality reduction and a Support Vector Machine for detection followed by approximate median filter for segmentation.
 \end{abstract}
 
 
@@ -62,9 +62,35 @@ Because of that it was chosen for this project.
 
 
 \section{Method}
+Train the detector:
 \begin{enumerate}
 \item{Process one frame at a time.}
+\item{Choose a number P of positive training examples and a number N of negativeexamples. Let N>>P. Also let N + P be as large as computing power is available.}
+\item{Train an SVM over the HOG descriptors of the samples.}
+\item{Apply hard-negative mining. That is, for slide a window across negative examples. Out of any window which produces a false positive, create an individual negative instance.}
+\item{Retrain. If the gain in accuracy is substancial, repeat the previous and this step.}
 \end{enumerate}
+
+Test the detector:
+\begin{enumerate}
+\item{Process one frame at a time.}
+\item{Run the model on a slideng window at various scales and positions.}
+\item{Apply non-negative suppression on detected bounding boxes.}
+\end{enumerate}
+
+Segmentation:
+\begin{enumerate}
+\item{Work onthe whole video.}
+\item{Perform foreground segmentation by approximate median filter\cite{amf}}
+\item{Run the detector on any blobs of foreground.}
+\item{For every detected bounding box, consider all foreground pixels inside to be a human silhouette.}
+\item{Test the complete algorithm on a small hand-crafted dataset.}
+\end{enumerate}
+
+
+\section{Results}
+To be released.
+Same for the implementation.
 
 
 \printbibliography
