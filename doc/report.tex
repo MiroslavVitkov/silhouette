@@ -64,10 +64,6 @@ Because of that it was chosen for this project.
 \section{Method}
 \begin{enumerate}
 \item{Process one frame at a time.}
-\item{Detect prominent features - intersecting edges of high contrast .}
-\item{Compute scene translation and rotation relative to the camera (without loss of generality, assume a static camera). Exclude outliers, such as the walking person.}
-\item{Parallelly to all the above, run a HAAR standing person detector on the frame.}
-\item{Now consider all frames of the video together. Interpolate and denoise the human figure movement.}
 \end{enumerate}
 
 
