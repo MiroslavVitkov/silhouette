@@ -1,0 +1,63 @@
+\documentclass{article}
+
+
+\usepackage[backend=bibtex, style=ieee]{biblatex}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage[table]{xcolor}
+
+
+\bibliography{report}
+\title{Human identification via gait in unconstrained videos}
+\author{Miroslav Vitkov \\ sir.vorac@gmail.com}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+Gait is a prominent biometric with similar importance to face recognition.
+The latter is feasable in the presence of heavy noise and can utilize inexpensive equipment.
+This report explores the feasability of the former when subjected to the same constraints.
+\end{abstract}
+
+
+\section{Introduction}
+The interdisciplinary field of human identification via gait is now 42 years old.
+Initially, glowing markers were used\cite{begin} for 38\% recognition accuracy, compared to random chance of 16.7\%.
+
+Further development split into model-free and model-based methods.
+Model-free methods look at pixels, one notable work being the gait energy model\cite{energy}.
+Model-based approaches use a strong prior, e.g. a pendulum model of legs\cite{pendulum}.
+
+Modern methods are dominated by motion vector estimated approaches, such as \cite{pyramid}
+A recent improvement to \cite{pyramid} demonstrates human recognition accuracy of 96\% using a fusion of a visible spectrum camera, a Microsoft Kinetic and a wearable accelerometer\cite{robust}.
+
+
+\section{Goal}
+Consider a random video of people walking - a movie, a running competition, a protesting crowd.
+The purpose of this work is to extract human stick-figure model of humans from the video.
+Not only the subject is moving but also the background and the verycamera.
+
+
+\section{Method}
+\begin{enumerate}
+\item{Process one frame at a time.}
+\item{Detect prominent features - intersecting edges of high contrast .}
+\item{Compute scene translation and rotation relative to the camera (without loss of generality, assume a static camera). Exclude outliers, such as the walking person.}
+\item{Parallelly to all the above, run a HAAR standing person detector on the frame.}
+\item{Now consider all frames of the video together. Interpolate and denoise the human figure movement.}
+\end{enumerate}
+
+
+\section{Dataset}
+kur\cite{largest}
+
+
+\printbibliography
+
+
+\end{document}
+
