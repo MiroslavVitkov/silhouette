@@ -50,9 +50,14 @@ The Histograms of Oriented Gradients (HOG)\cite{hog} descriptor encodes an an im
 It works in a sliding window or square or circular shape.
 Horizontal and vertical derivatives are calculated with a centered mask (1 0 1).
 All generated values in the window are summarized into one tupple (direction, magnitude).
+This approachis believed to work better than the earlier Local Binary Patterns.
 
 
 \section{Dataset}
+Numerous human tracking outdoor datasets are described in the literature\cite{datasets0}\cite{datasets1}.
+Notable is the occlusion dataset\cite{datasets2}, providing experience close to real world outdoor survailence.
+The AVA indoor dataset\cite{ava} consists of a large number (1200) single view videos.
+Because of that it was chosen for this project.
 
 
 
@@ -64,10 +69,6 @@ All generated values in the window are summarized into one tupple (direction, ma
 \item{Parallelly to all the above, run a HAAR standing person detector on the frame.}
 \item{Now consider all frames of the video together. Interpolate and denoise the human figure movement.}
 \end{enumerate}
-
-
-\section{Dataset}
-kur\cite{largest}
 
 
 \printbibliography
