@@ -1,10 +1,12 @@
 #include "io.h"
 
 #include <dirent.h>
+#include <dlib/base64.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
 #include <regex>
+#include <sstream>
 
 
 namespace io
@@ -447,6 +449,28 @@ DirWriter & DirWriter::operator<<( const cv::Mat & frame )
     assert( _frame_num != 0 );
 
     return *this;
+}
+
+
+
+// Read "bitmap" -> "data".
+//def base64_2_mask(s):
+//    z = zlib.decompress(base64.b64decode(s))
+//    n = np.fromstring(z, np.uint8)
+//    mask = cv2.imdecode(n, cv2.IMREAD_UNCHANGED)[:, :, 3].astype(bool)
+//    return mask
+
+
+std::string decode64( const std::string & encoded )
+{
+    dlib::base64 decoder;
+    std::stringstream in{ encoded };
+    std::stringstream out;
+
+    decoder.decode( in, out );
+
+    const std::string ret{ out.str() };
+    return ret;
 }
 
 
