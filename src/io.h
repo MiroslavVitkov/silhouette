@@ -144,6 +144,9 @@ private:
 };
 
 
+std::vector< uint8_t > decode_base64( const std::string & encoded );
+
+
 }  // namespace io
 
 

@@ -1,5 +1,7 @@
 #include "io.h"
 
+#include <cppcodec/base64_rfc4648.hpp>
+
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -447,6 +449,15 @@ DirWriter & DirWriter::operator<<( const cv::Mat & frame )
     assert( _frame_num != 0 );
 
     return *this;
+}
+
+
+std::vector< uint8_t > decode_base64( const std::string & encoded )
+{
+    using base64 = cppcodec::base64_rfc4648;
+
+    std::vector< uint8_t > decoded = base64::decode( encoded );
+    return decoded;
 }
 
 

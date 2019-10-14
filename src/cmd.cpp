@@ -7,7 +7,7 @@
 
 #include <vector>
 
-
+#include <iostream>
 namespace cmd
 {
 
@@ -22,6 +22,10 @@ void CamDetectShow::execute()
 
     cv::HOGDescriptor detector;
     detector.setSVMDetector( cv::HOGDescriptor::getDefaultPeopleDetector() );
+
+    const std::string kur{"YW55IGNhcm5hbCBwbGVhc3VyZQ=="};
+    const auto putka {io::decode_base64( kur )};
+    std::cout << putka.size() << std::endl;
 
     while( cam >> frame )
     {

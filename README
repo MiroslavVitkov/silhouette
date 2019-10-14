@@ -1,1 +1,3 @@
 Silhouette extraction for pedestrians
+
+depends on 'https://github.com/tplgy/cppcodec'

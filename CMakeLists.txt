@@ -14,3 +14,4 @@ add_executable( silhouette src/algo.cpp
                            src/main.cpp )
 
 target_link_libraries( silhouette stdc++fs ${OpenCV_LIBS} )
+target_include_directories( silhouette SYSTEM PRIVATE "/home/vorac/proj/cppcodec" )
