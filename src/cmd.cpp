@@ -7,7 +7,12 @@
 
 #include <vector>
 
+#include <nlohmann/json.hpp>
 #include <iostream>
+#include <fstream>
+#include <zlc/zlibcomplete.hpp>
+#include <stdint.h>
+using json = nlohmann::json;
 namespace cmd
 {
 
@@ -23,9 +28,23 @@ void CamDetectShow::execute()
     cv::HOGDescriptor detector;
     detector.setSVMDetector( cv::HOGDescriptor::getDefaultPeopleDetector() );
 
-    const std::string kur{"YW55IGNhcm5hbCBwbGVhc3VyZQ=="};
-    const auto putka {io::decode_base64( kur )};
-    std::cout << putka.size() << std::endl;
+
+    // Decode base64 -> binary.
+    std::ifstream file{ "/media/share/downloads/supervisely_person_dataset/ds1/ann/bodybuilder-weight-training-stress-38630.png.json" };
+    const auto j = json::parse( file );
+    const auto k = j["objects"][0]["bitmap"]["data"];
+    const auto putka {io::decode_base64( k )};
+
+    zlibcomplete::GZipDecompressor d;
+    const std::string putka2{ putka.cbegin(), putka.cend() };
+    const auto dec = d.decompress( putka2 );
+
+
+    for(const auto & p : putka)
+    {
+        std::cout << std::to_string(p) << ' ';
+    }
+    std::cout << std::endl << std::endl << putka.size() << std::endl;
 
     while( cam >> frame )
     {

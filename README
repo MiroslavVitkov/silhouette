@@ -1,3 +1,5 @@
 Silhouette extraction for pedestrians
 
 depends on 'https://github.com/tplgy/cppcodec'
+depends on 'https://github.com/nlohmann/json.git' aka nlohmann-json3-dev
+depends on https://github.com/rudi-cilibrasi/zlibcomplete.git'
