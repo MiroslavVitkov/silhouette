@@ -1,5 +1,6 @@
 #include "cmd.h"
 
+#include "bitmap.h"
 #include "io.h"
 
 #include <opencv2/opencv.hpp>
@@ -34,19 +35,19 @@ void CamDetectShow::execute()
     const auto bitmap = jon["objects"][0]["bitmap"]["data"];
 
     // Decode base64 -> binary.
-    const auto decoded{ io::decode_base64( bitmap ) };
+    const auto decoded{ bitmap::decode_base64( bitmap ) };
 
     // Decompress.
     zlibcomplete::ZLibDecompressor decomp;
     const std::string decoded_str( decoded.cbegin(), decoded.cend() );
-    std::cout << decoded_str.length() << std::endl;
+    std::cout << decoded_str << std::endl;
     const auto decompressed = decomp.decompress( decoded_str );
 
-    for(const auto & p : decompressed)
-    {
-        std::cout << std::to_string(p) << ' ';
-    }
-    std::cout << std::endl << std::endl << decompressed.size() << std::endl;
+    // Produce a binary pixel mask.
+    // Location and size are separately specified in the json.
+//    const std::vector<char> charvect(decompressed.begin(), decompressed.end());
+//    cv::Mat bitmap2( charvect.cbegin(), charvect.cend() );
+//    cv::imdecode( bitmap2, cv::IMREAD_UNCHANGED );
 
     while( cam >> frame )
     {

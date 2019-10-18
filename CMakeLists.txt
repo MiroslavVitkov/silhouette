@@ -12,6 +12,7 @@ find_library( ZLIBCOMPLETE
               HINTS "/usr/local/lib/" )
 
 add_executable( silhouette src/algo.cpp
+                           src/bitmap.cpp
                            src/cli.cpp
                            src/cmd.cpp
                            src/io.cpp
