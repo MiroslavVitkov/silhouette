@@ -37,7 +37,7 @@ void CamDetectShow::execute()
     const auto decoded{ io::decode_base64( bitmap ) };
 
     // Decompress.
-    zlibcomplete::GZipDecompressor decomp;
+    zlibcomplete::ZLibDecompressor decomp;
     const std::string decoded_str( decoded.cbegin(), decoded.cend() );
     std::cout << decoded_str.length() << std::endl;
     const auto decompressed = decomp.decompress( decoded_str );
