@@ -28,23 +28,25 @@ void CamDetectShow::execute()
     cv::HOGDescriptor detector;
     detector.setSVMDetector( cv::HOGDescriptor::getDefaultPeopleDetector() );
 
+    // Read the bitmap from file.
+    std::ifstream file{ "/media/share/downloads/supervisely_person_dataset/ds1/ann/bodybuilder-weight-training-stress-38630.png.json" };
+    const auto jon = json::parse( file );
+    const auto bitmap = jon["objects"][0]["bitmap"]["data"];
 
     // Decode base64 -> binary.
-    std::ifstream file{ "/media/share/downloads/supervisely_person_dataset/ds1/ann/bodybuilder-weight-training-stress-38630.png.json" };
-    const auto j = json::parse( file );
-    const auto k = j["objects"][0]["bitmap"]["data"];
-    const auto putka {io::decode_base64( k )};
+    const auto decoded{ io::decode_base64( bitmap ) };
 
-    zlibcomplete::GZipDecompressor d;
-    const std::string putka2{ putka.cbegin(), putka.cend() };
-    const auto dec = d.decompress( putka2 );
+    // Decompress.
+    zlibcomplete::GZipDecompressor decomp;
+    const std::string decoded_str( decoded.cbegin(), decoded.cend() );
+    std::cout << decoded_str.length() << std::endl;
+    const auto decompressed = decomp.decompress( decoded_str );
 
-
-    for(const auto & p : putka)
+    for(const auto & p : decompressed)
     {
         std::cout << std::to_string(p) << ' ';
     }
-    std::cout << std::endl << std::endl << putka.size() << std::endl;
+    std::cout << std::endl << std::endl << decompressed.size() << std::endl;
 
     while( cam >> frame )
     {
