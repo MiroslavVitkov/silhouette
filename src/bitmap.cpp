@@ -1,27 +1,59 @@
 #include "bitmap.h"
 
 #include <cppcodec/base64_rfc4648.hpp>
-
-#include <fstream>
 #include <nlohmann/json.hpp>
 #include <zlc/zlibcomplete.hpp>
 
+#include <fstream>
 
-using json = nlohmann::json;
+
+// This whole module reimplements the following python function:
+//def base64_2_mask(s):
+//    z = zlib.decompress(base64.b64decode(s))
+//    n = np.fromstring(z, np.uint8)
+//    mask = cv2.imdecode(n, cv2.IMREAD_UNCHANGED)[:, :, 3].astype(bool)
+//    return mask
 
 
 namespace bitmap
 {
 
 
-std::string read_json_field( const std::string & path )
+struct JsonParser
 {
-    (void)path;
-    std::ifstream file{ "/media/share/downloads/supervisely_person_dataset/ds1/ann/bodybuilder-weight-training-stress-38630.png.json" };
-    const auto parsed = json::parse( file );
-    const auto bitmap = parsed[ "objects" ][ 0 ][ "bitmap" ][ "data" ];
-    return bitmap;
-}
+    JsonParser( const std::string & json_path )
+        :  _parsed{ nlohmann::json::parse( std::ifstream{ json_path } ) }
+    {
+    }
+
+
+    cv::Size get_image_size() const
+    {
+        const auto height = _parsed[ "size" ][ "height" ];
+        const auto width = _parsed[ "size" ][ "width" ];
+        return { width, height};
+    }
+
+
+
+    BitmapsRaw get_bitmaps() const
+    {
+        BitmapsRaw ret;
+        for( const auto & obj : _parsed[ "objects" ] )
+        {
+            const auto pos = obj[ "bitmap" ][ "origin" ];
+            assert( pos.size() == 2 );
+
+            cv::Size s{ pos[ 0 ], pos[ 1 ] };
+            ret.emplace_back( s, obj[ "bitmap" ][ "data" ] );
+        }
+        return ret;
+    }
+
+
+private:
+    nlohmann::json _parsed;
+};
 
 
 std::vector< uint8_t > decode_base64( const std::string & encoded )
@@ -43,17 +75,25 @@ std::string decompress( const std::vector< uint8_t > in )
 
 
 // Produce a binary pixel mask.
-// Location and size are separately specified in the json.
-//    const std::vector<char> charvect(decompressed.begin(), decompressed.end());
-//    cv::Mat bitmap2( charvect.cbegin(), charvect.cend() );
-//    cv::imdecode( bitmap2, cv::IMREAD_UNCHANGED );
-
-
-void read( const std::string & path )
+cv::Mat to_mask( std::string & decompressed, cv::Size size )
 {
-    const auto field = read_json_field( path );
-    const auto decoded = decode_base64( field );
-    const auto decompressed = decompress( decoded );
+    const cv::Mat bitmap( size, CV_8UC1, decompressed.data() );
+    const auto decoded = cv::imdecode( bitmap, cv::IMREAD_UNCHANGED );
+    return decoded;
+}
+
+
+Bitmaps read( const std::string & json_path )
+{
+    Bitmaps ret;
+    JsonParser j{ json_path };
+    for( const auto & b : j.get_bitmaps() )
+    {
+        const auto decoded = decode_base64( b.second );
+        auto decompressed = decompress( decoded );
+        const auto mask = to_mask( decompressed, cv::Size{} );
+    }
+    return ret;
 }
 
 
