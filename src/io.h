@@ -41,7 +41,7 @@ struct FrameSink
 };
 
 
-struct Camera : public FrameSource
+struct Camera : FrameSource
 {
     enum class Id : int
     {
@@ -60,7 +60,7 @@ private:
 };
 
 
-struct VideoReader : public FrameSource
+struct VideoReader : FrameSource
 {
     VideoReader( const std::string & path );
     operator bool() const override;
@@ -75,8 +75,7 @@ private:
 
 // A directory with one subdirectory per subject.
 // Subdirectory names are the labels.
-// Each subdirectory contains cropped faces of that one subject.
-struct DirReader : public FrameSource
+struct DirReader : FrameSource
 {
     DirReader( const std::string & path
              , Mode mode = Mode::_colour
@@ -116,7 +115,7 @@ private:
 };
 
 
-struct VideoWriter : public FrameSink
+struct VideoWriter : FrameSink
 {
     // How to fit smaller frames to the video.
     enum class Fit{ _border };
