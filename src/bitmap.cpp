@@ -35,8 +35,8 @@ struct JsonParser
 
     cv::Size get_image_size() const
     {
-        const auto height = _parsed[ "size" ][ "height" ];
-        const auto width = _parsed[ "size" ][ "width" ];
+        const int height = _parsed[ 0 ][ "size" ][ "height" ];
+        const int width = _parsed[ 0 ][ "size" ][ "width" ];
         return { width, height};
     }
 
@@ -45,7 +45,7 @@ struct JsonParser
     BitmapsRaw get_bitmaps() const
     {
         BitmapsRaw ret;
-        for( const auto & obj : _parsed[ "objects" ] )
+        for( const auto & obj : _parsed[ 0 ][ "objects" ] )
         {
             const auto pos = obj[ "bitmap" ][ "origin" ];
             assert( pos.size() == 2 );
