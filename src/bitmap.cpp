@@ -5,7 +5,7 @@
 #include <zlc/zlibcomplete.hpp>
 
 #include <fstream>
-
+#include <tuple>
 
 // This whole module reimplements the following python function:
 //def base64_2_mask(s):
@@ -21,6 +21,12 @@ namespace bitmap
 
 struct JsonParser
 {
+    // pair.first: coordinates of top left corner of bitmap
+    // pair.second: encoded or decoded silhouette
+    // Each bitmap corresponds to one person obviously.
+    using BitmapsRaw = std::vector< std::pair< cv::Size, std::string > >;
+
+
     JsonParser( const std::string & json_path )
         :  _parsed{ nlohmann::json::parse( std::ifstream{ json_path } ) }
     {

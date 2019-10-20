@@ -8,7 +8,6 @@
 #include <opencv2/opencv.hpp>
 
 #include <string>
-#include <tuple>
 #include <vector>
 
 
@@ -16,14 +15,8 @@ namespace bitmap
 {
 
 
-// pair.first: coordinates of top left corner of bitmap
-// pair.second: encoded or decoded silhouette
-// Each bitmap corresponds to one person obviously.
-using BitmapsRaw = std::vector< std::pair< cv::Size, std::string > >;
-using Bitmaps = std::vector< std::pair< cv::Size, cv::Mat > >;
-
-
-Bitmaps read( const std::string & json_path );
+// cv::Mat< CV_8UC1 >: background pixels are 0, human silhouettes are nonzero.
+cv::Mat read( const std::string & json_path );
 
 
 }  // namespace bitmap

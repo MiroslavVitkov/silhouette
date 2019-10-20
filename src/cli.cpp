@@ -19,7 +19,7 @@ std::unique_ptr< cmd::Base > help( const cv::CommandLineParser & parser )
 }
 
 
-std::unique_ptr<cmd::Base> parse( int argc, Argv argv )
+std::unique_ptr< cmd::Base > parse( int argc, Argv argv )
 {
     const std::string keys =
         "{help h usage ? |      | print this message}"
