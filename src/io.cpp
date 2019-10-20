@@ -1,5 +1,7 @@
 #include "io.h"
 
+#include "bitmap.h"
+
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -355,6 +357,60 @@ std::vector<cv::Mat> crop( const cv::Mat & frame
 
     return ret;
 }
+
+
+struct SuperviselyReader::Impl
+{
+    Impl( const std::string & path )
+    {
+        (void) path;
+    }
+
+
+    Impl & operator>>( cv::Mat & frame )
+    {
+        (void)frame;
+        return *this;
+    }
+
+
+    operator bool() const
+    {
+        return true;
+    }
+
+
+    cv::Size get_size() const
+    {
+        return {};
+    }
+};
+
+
+SuperviselyReader::SuperviselyReader( const std::string & path )
+    :_impl{ std::make_unique< Impl >( path ) }
+{
+}
+
+
+SuperviselyReader & SuperviselyReader::operator>>( cv::Mat & frame )
+{
+    *_impl >> frame;
+    return *this;
+}
+
+
+SuperviselyReader::operator bool() const
+{
+    return ( !! *_impl );
+}
+
+
+cv::Size SuperviselyReader::get_size() const
+{
+    return _impl->get_size();
+}
+
 
 
 VideoPlayer::VideoPlayer(const std::string & window_name )

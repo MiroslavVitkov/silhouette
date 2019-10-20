@@ -105,6 +105,19 @@ std::vector<cv::Mat> crop( const cv::Mat & frame
                          , const std::vector<cv::Rect> & rects );
 
 
+struct SuperviselyReader : FrameSource
+{
+    SuperviselyReader( const std::string & path );
+    SuperviselyReader & operator>>( cv::Mat & frame ) override;
+    virtual operator bool() const override;
+    virtual cv::Size get_size() const override;
+
+private:
+    struct Impl;
+    std::unique_ptr< Impl > _impl;
+};
+
+
 struct VideoPlayer : FrameSink
 {
     VideoPlayer( const std::string & window_name = "" );
