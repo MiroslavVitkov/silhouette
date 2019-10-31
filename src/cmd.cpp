@@ -15,7 +15,9 @@ namespace cmd
 
 void CamDetectShow::execute()
 {
-    bitmap::read( "/media/share/downloads/supervisely_person_dataset/ds1/ann/youth-active-jump-happy-40815.png.json" );
+    io::SuperviselyReader r{"/media/share/downloads/supervisely_person_dataset/"};
+    cv::Mat frame2;
+    r >> frame2;
 
     io::Camera cam{ io::Mode::_colour };
     io::VideoPlayer player{ "pedestrians" };

@@ -6,7 +6,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <experimental/filesystem>
+
 #include <regex>
+
+
+namespace fs = std::experimental::filesystem;
 
 
 namespace io
@@ -361,34 +366,90 @@ std::vector<cv::Mat> crop( const cv::Mat & frame
 
 struct SuperviselyReader::Impl
 {
-    Impl( const std::string & path )
+    static constexpr unsigned _subdir_first = 1;
+    static constexpr unsigned _subdir_last = 13;
+    const std::string _subdir_prefix = "ds";
+    const std::string _ann_subsubdir = "ann";
+    const std::string _imd_subsubdir = "img";
+
+
+    Impl( const std::string & path, bool calc_size = false )
+        : _root_path{ path }
+        , _it{ path }
+        , _size{}
     {
-        (void) path;
+        // Expensive!
+        if( calc_size )
+        {
+             _size = calc_largest_size( _root_path );
+        }
     }
 
 
     Impl & operator>>( cv::Mat & frame )
     {
-        (void)frame;
+        for(; _it != fs::end( _it ) &&
+              _it->path().filename().extension() != ".png"
+            ; ++_it );
+
+        // The result of operator* or operator-> on the end iterator
+        // is undefined behavior.
+        assert( _it != fs::end( _it ) );
+
+
+        const auto img = _it->path();
+        const auto json = _it->path().parent_path() / fs::path{"../ann/"} /
+                        ( _it->path().filename().replace_extension( ".png.json" ) );
+
+        //if(fs::is_regular_file(_it->status()) && name.path().filename().endin"*.png")
+
+        //const auto img = _root_path + '/' + _stream->d_name;
+        //const auto json = img + ".json";
+
+        //frame = cv::imread( img, CV_LOAD_IMAGE_UNCHANGED );
+        if( ! frame.data )
+        {
+            //throw Exception{ "Failed to read Supervisely file: " + img };
+        }
+
+        ++_it;
         return *this;
     }
 
 
     operator bool() const
     {
-        return true;
+        return _it != fs::end( _it );
     }
 
 
     cv::Size get_size() const
     {
+        assert( _size != cv::Size{} );
+        return _size;
+    }
+
+
+    std::vector< Silhouette > get_last_silhouettes() const
+    {
         return {};
     }
+
+
+private:
+    const std::string _root_path;
+    fs::recursive_directory_iterator _it;
+    cv::Size _size;  // largest width and height
 };
 
 
 SuperviselyReader::SuperviselyReader( const std::string & path )
     :_impl{ std::make_unique< Impl >( path ) }
+{
+}
+
+
+SuperviselyReader::~SuperviselyReader()
 {
 }
 
@@ -411,6 +472,12 @@ cv::Size SuperviselyReader::get_size() const
     return _impl->get_size();
 }
 
+
+
+std::vector< SuperviselyReader::Silhouette > SuperviselyReader::get_last_silhouettes() const
+{
+    return _impl->get_last_silhouettes();
+}
 
 
 VideoPlayer::VideoPlayer(const std::string & window_name )
