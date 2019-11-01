@@ -15,10 +15,6 @@ namespace cmd
 
 void CamDetectShow::execute()
 {
-    io::SuperviselyReader r{"/media/share/downloads/supervisely_person_dataset/"};
-    cv::Mat frame2;
-    r >> frame2;
-
     io::Camera cam{ io::Mode::_colour };
     io::VideoPlayer player{ "pedestrians" };
     cv::Mat frame;
@@ -40,6 +36,21 @@ void CamDetectShow::execute()
         io::draw_rects( frame, rects );
         rects.clear();
         player << frame;
+    }
+
+}
+
+
+void DatDetectShow::execute()
+{
+    io::SuperviselyReader r{"/media/share/downloads/supervisely_person_dataset/"};
+    cv::Mat frame;
+    io::VideoPlayer p{"kur"};
+    while( r >> frame )
+    {
+        std::cout << "new picture!" << std::endl;
+        try{
+        p << frame;}catch(...){}
     }
 
 }

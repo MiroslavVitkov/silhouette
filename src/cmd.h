@@ -33,6 +33,13 @@ struct CamDetectShow : Base
 };
 
 
+// Supervisely dataset -> detect pedestrians -> play video
+struct DatDetectShow : Base
+{
+    void execute() override;
+};
+
+
 }  // namespace cmd
 
 
