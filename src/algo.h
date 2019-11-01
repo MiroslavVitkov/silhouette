@@ -7,9 +7,16 @@
 
 #include "except.h"
 
+#include <opencv2/opencv.hpp>
+
+#include <vector>
+
 
 namespace algo
 {
+
+
+std::vector< cv::Rect > detect_pedestrians( const cv::Mat & frame );
 
 
 }  // namespace algo
