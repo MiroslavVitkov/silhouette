@@ -1,5 +1,6 @@
 #include "cmd.h"
 
+#include "algo.h"
 #include "bitmap.h"
 #include "io.h"
 
@@ -48,9 +49,11 @@ void DatDetectShow::execute()
     io::VideoPlayer p{"kur"};
     while( r >> frame )
     {
-        std::cout << "new picture!" << std::endl;
-        try{
-        p << frame;}catch(...){}
+        const auto det = algo::detect_pedestrians( frame );
+                std::cout << det.size() << std::endl;
+                io::draw_rects( frame, det );
+        p << frame;
+
     }
 
 }
