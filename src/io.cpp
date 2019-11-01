@@ -394,22 +394,21 @@ struct SuperviselyReader::Impl
 
         // The result of operator* or operator-> on the end iterator
         // is undefined behavior.
-        assert( _it != fs::end( _it ) );
+        if( _it == fs::end( _it ) )
+        {
+            throw Exception{ "End of iteration of dataset." };
+        }
 
 
         const auto img = _it->path();
         const auto json = _it->path().parent_path() / fs::path{"../ann/"} /
                         ( _it->path().filename().replace_extension( ".png.json" ) );
 
-        //if(fs::is_regular_file(_it->status()) && name.path().filename().endin"*.png")
+        frame = cv::imread( img.string(), CV_LOAD_IMAGE_UNCHANGED );
 
-        //const auto img = _root_path + '/' + _stream->d_name;
-        //const auto json = img + ".json";
-
-        //frame = cv::imread( img, CV_LOAD_IMAGE_UNCHANGED );
         if( ! frame.data )
         {
-            //throw Exception{ "Failed to read Supervisely file: " + img };
+            throw Exception{ "Failed to read Supervisely file: " + img.string() };
         }
 
         ++_it;
