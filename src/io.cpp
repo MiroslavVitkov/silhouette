@@ -335,11 +335,20 @@ std::vector<DirReader> get_subdirs( const std::string & dataset_path
 }
 
 
-void draw_rects( cv::Mat & frame, const std::vector<cv::Rect> & rects )
+void draw_rects( cv::Mat & frame, const std::vector<cv::Rect> & rects, Colour c )
 {
+    const auto col = [ c ] ()
+    {
+        switch( c )
+        {
+            case Colour::_red: return cv::Scalar( 255, 0, 0 );
+            case Colour::_green: return cv::Scalar( 0, 255, 0 );
+            default: assert( false );
+        }
+    } ();
     for( const auto & r : rects )
     {
-        cv::rectangle( frame, r, cv::Scalar(0, 255, 0) );
+        cv::rectangle( frame, r, col );
     }
 }
 

@@ -47,18 +47,21 @@ void DatDetectShow::execute()
     io::SuperviselyReader r{"/media/share/downloads/supervisely_person_dataset/"};
     cv::Mat frame;
     io::VideoPlayer p{"kur"};
+    unsigned real{}, detected{};
     while( r >> frame )
     {
         const auto det = algo::detect_pedestrians( frame );
-        std::cout << det.size() << std::endl;
+        io::draw_rects( frame, det, io::Colour::_red );
+        detected += det.size();
 
         const auto vs = r.get_last_silhouettes();
         const auto vb = [&] () { std::vector<cv::Rect> ret; for(const auto & s : vs){ret.push_back(s._box);} return ret; } ();
-        io::draw_rects( frame, vb );
-        std::cout << "*****" << vb.size() << std::endl;
+        io::draw_rects( frame, vb, io::Colour::_green );
+        real += vb.size();
         p << frame;
-
     }
+
+    std::cout <<  "detected " << detected << " people out of " << real << std::endl;
 
 }
 
