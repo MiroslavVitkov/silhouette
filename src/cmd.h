@@ -40,6 +40,15 @@ struct DatDetectShow : Base
 };
 
 
+// Measure the accuracy of the OpenCV pretrained pedestrian detector
+// over the Supervisely Persons Dataset.
+// Supervisely dataset -> detect pedestrians -> measure accuracy
+struct DatDetectSummarise : Base
+{
+    void execute() override;
+};
+
+
 }  // namespace cmd
 
 

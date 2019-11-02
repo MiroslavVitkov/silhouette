@@ -24,7 +24,8 @@ std::unique_ptr< cmd::Base > parse( int argc, Argv argv )
     const std::string keys =
         "{help h usage ? |      | print this message}"
         "{cam c          |      | cam -> detect -> show}"
-        "{dataset d          |      | Supervisely dataset -> detect -> show}"
+        "{dataset d      |      | Supervisely dataset -> detect -> show}"
+        "{accuracy a     |      | Supervisely dataset -> detect -> calc accuracy}"
         ;
 
     cv::CommandLineParser parser( argc, argv, keys );
@@ -42,6 +43,11 @@ std::unique_ptr< cmd::Base > parse( int argc, Argv argv )
     if( parser.has( "dataset" ) )
     {
         return std::make_unique< cmd::DatDetectShow >();
+    }
+
+    if( parser.has( "accuracy" ) )
+    {
+        return std::make_unique< cmd::DatDetectSummarise >();
     }
 
     return help( parser );

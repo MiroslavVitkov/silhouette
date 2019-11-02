@@ -66,4 +66,49 @@ void DatDetectShow::execute()
 }
 
 
+float intersect( const cv::Rect & r1, const cv::Rect & r2 )
+{
+    const auto intersect =  r1 & r2;
+    return intersect.area() / r1.area();
+}
+
+
+void DatDetectSummarise::execute()
+{
+    io::SuperviselyReader r{"/media/share/downloads/supervisely_person_dataset/"};
+    cv::Mat frame;
+    unsigned real{}, true_positives{}, false_positives{};
+    while( r >> frame )
+    {
+        const auto det = algo::detect_pedestrians( frame );
+
+        const auto vs = r.get_last_silhouettes();
+        const auto vb = [&] () { std::vector<cv::Rect> ret; for(const auto & s : vs){ret.push_back(s._box);} return ret; } ();
+        real += vb.size();
+
+        for( const auto & d : det )
+        {
+            unsigned before = true_positives;
+            for( const auto & r : vb )
+            {
+                if( intersect( d, r ) > 0.5)
+                {
+                    ++true_positives;
+                }
+            }
+
+            if(true_positives == before)
+            {
+                false_positives++;
+            }
+        }
+        std::cout <<  "detected " << det.size() << " people out of " << vs.size() << std::endl;
+    }
+
+    std::cout << "total real: " << real << ", true_positives: " << true_positives
+              << ", false positivesL " << false_positives;
+
+}
+
+
 }  // namespace cmd

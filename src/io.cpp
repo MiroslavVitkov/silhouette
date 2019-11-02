@@ -443,7 +443,6 @@ struct SuperviselyReader::Impl
     {
         const auto json = _it->path().parent_path() / fs::path{"../ann/"} /
                         ( _it->path().filename().replace_extension( ".png.json" ) );
-        std::cout << "JSON: " << json << std::endl;
         return bitmap::read( json );
     }
 
