@@ -9,7 +9,7 @@
 #include <experimental/filesystem>
 
 #include <regex>
-
+#include <iostream>
 
 namespace fs = std::experimental::filesystem;
 
@@ -388,6 +388,8 @@ struct SuperviselyReader::Impl
 
     Impl & operator>>( cv::Mat & frame )
     {
+        ++_it; // WRONG!
+
         for(; _it != fs::end( _it ) &&
               _it->path().filename().extension() != ".png"
             ; ++_it );
@@ -411,7 +413,6 @@ struct SuperviselyReader::Impl
             throw Exception{ "Failed to read Supervisely file: " + img.string() };
         }
 
-        ++_it;
         return *this;
     }
 
@@ -429,9 +430,12 @@ struct SuperviselyReader::Impl
     }
 
 
-    std::vector< Silhouette > get_last_silhouettes() const
+    std::vector< bitmap::Silhouette > get_last_silhouettes() const
     {
-        return {};
+        const auto json = _it->path().parent_path() / fs::path{"../ann/"} /
+                        ( _it->path().filename().replace_extension( ".png.json" ) );
+        std::cout << "JSON: " << json << std::endl;
+        return bitmap::read( json );
     }
 
 
@@ -473,7 +477,7 @@ cv::Size SuperviselyReader::get_size() const
 
 
 
-std::vector< SuperviselyReader::Silhouette > SuperviselyReader::get_last_silhouettes() const
+std::vector< bitmap::Silhouette > SuperviselyReader::get_last_silhouettes() const
 {
     return _impl->get_last_silhouettes();
 }

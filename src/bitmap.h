@@ -14,9 +14,21 @@
 namespace bitmap
 {
 
-
 // cv::Mat< CV_8UC1 >: background pixels are 0, human silhouettes are nonzero.
-cv::Mat read( const std::string & json_path );
+struct Silhouette
+{
+    const cv::Rect _box;
+    const cv::Mat _bitmap;
+
+    void check() const
+    {
+        assert( _bitmap.rows == _box.height );
+        assert( _bitmap.cols == _box.width );
+    }
+};
+
+
+std::vector< Silhouette > read( const std::string & json_path );
 
 
 }  // namespace bitmap

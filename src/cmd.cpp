@@ -50,8 +50,12 @@ void DatDetectShow::execute()
     while( r >> frame )
     {
         const auto det = algo::detect_pedestrians( frame );
-                std::cout << det.size() << std::endl;
-                io::draw_rects( frame, det );
+        std::cout << det.size() << std::endl;
+
+        const auto vs = r.get_last_silhouettes();
+        const auto vb = [&] () { std::vector<cv::Rect> ret; for(const auto & s : vs){ret.push_back(s._box);} return ret; } ();
+        io::draw_rects( frame, vb );
+        std::cout << "*****" << vb.size() << std::endl;
         p << frame;
 
     }

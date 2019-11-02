@@ -6,6 +6,7 @@
 
 
 #include "except.h"
+#include "bitmap.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -107,25 +108,12 @@ std::vector<cv::Mat> crop( const cv::Mat & frame
 
 struct SuperviselyReader : FrameSource
 {
-    struct Silhouette
-    {
-        const cv::Rect _box;
-        const cv::Mat _bitmap;
-
-        void check() const
-        {
-            assert( _bitmap.rows == _box.height );
-            assert( _bitmap.cols == _box.width );
-        }
-    };
-
-
     SuperviselyReader( const std::string & path );
     ~SuperviselyReader() override;
     SuperviselyReader & operator>>( cv::Mat & frame ) override;
     virtual operator bool() const override;
     virtual cv::Size get_size() const override;
-    std::vector< Silhouette > get_last_silhouettes() const;
+    std::vector< bitmap::Silhouette > get_last_silhouettes() const;
 
 private:
     struct Impl;

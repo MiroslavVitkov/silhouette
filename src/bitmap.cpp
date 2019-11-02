@@ -47,6 +47,11 @@ struct JsonParser
         BitmapsRaw ret;
         for( const auto & obj : _parsed[ 0 ][ "objects" ] )
         {
+            if(obj[ "classTitle" ] != "person_bmp" )
+            {
+                continue;
+            }
+
             const auto pos = obj[ "bitmap" ][ "origin" ];
             assert( pos.size() == 2 );
 
@@ -81,23 +86,31 @@ std::string decompress( const std::vector< uint8_t > in )
 
 
 // Produce a binary pixel mask.
-cv::Mat to_mask( std::string & decompressed, cv::Size size )
+cv::Mat to_mask( std::string & decompressed, cv::Size )
 {
-    const cv::Mat bitmap( size, CV_8UC1, decompressed.data() );
+    const cv::Mat bitmap( decompressed.size(), 1, CV_8UC1, decompressed.data() );
     const auto decoded = cv::imdecode( bitmap, cv::IMREAD_UNCHANGED );
     return decoded;
 }
 
 
-Bitmaps read( const std::string & json_path )
+std::vector< Silhouette > read( const std::string & json_path )
 {
-    Bitmaps ret;
     JsonParser j{ json_path };
+
+    std::vector< Silhouette > ret;
+
     for( const auto & b : j.get_bitmaps() )
     {
         const auto decoded = decode_base64( b.second );
         auto decompressed = decompress( decoded );
-        const auto mask = to_mask( decompressed, cv::Size{} );
+
+        // This is wrong. b.first denotes offset of bitmap in the image,
+        // not bitmap size. But it works. Go figure!
+        const auto mask = to_mask( decompressed, b.first );
+        Silhouette s{ cv::Rect{ b.first.width, b.first.height, mask.cols, mask.rows }
+                    , mask };
+        ret.push_back( s );
     }
     return ret;
 }
