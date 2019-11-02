@@ -54,17 +54,26 @@ This approach is believed to work better than the earlier Local Binary Patterns.
 
 
 \section{Dataset}
+\subsection{What is out there}
 Numerous human tracking outdoor datasets are described in the literature\cite{datasets0}\cite{datasets1}.
 Notable is the occlusion dataset\cite{datasets2}, providing experience close to real world outdoor surveillance.
 Also the AVA indoor dataset\cite{ava} consists of a large number (1200) single view videos.
-\\
-The best siloutette segmentation dataset is Supervisely's human dataset\cite{supervisely}. This is a sample from it:
+
+\subsection{What was chosen}
+The best siloutette segmentation dataset seems to be Supervisely's human dataset\cite{supervisely}. This is a sample from it:
 \\
 \includegraphics[height=0.5\textwidth]{../img/supervisely}
 \\
 compare it to COCO's segmented siloutettes:
 \\
 \includegraphics[height=0.5\textheight]{../img/coco}.
+
+\subsection{In addition to that}
+Segmenting silouettes by static images is increadibly difficult.
+To fasciliate the task, a dataset of videos was compiled.
+It was expected to fasciliate frame-to-frame adaptive background subtraction in preselected regions to generate the actual silouettes.
+It consists of X videos of a single walking subject, totalling S seconds of footage.
+
 
 \section{Method}
 Train the detector:
