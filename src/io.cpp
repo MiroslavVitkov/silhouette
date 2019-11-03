@@ -58,7 +58,7 @@ Camera & Camera::operator>>( cv::Mat & frame )
         case Mode::_grayscale:
             cv::Mat tmp;
             _video_stream >> tmp;
-            cv::cvtColor( tmp, frame, CV_BGR2GRAY );
+            cv::cvtColor( tmp, frame, cv::COLOR_RGB2BGR );
             break;
     }
 
@@ -215,9 +215,9 @@ struct DirReader::Impl
             switch ( _read_mode )
             {
                 case Mode::_colour:
-                    return CV_LOAD_IMAGE_UNCHANGED;
+                    return cv::IMREAD_UNCHANGED;
                 case Mode::_grayscale:
-                    return CV_LOAD_IMAGE_GRAYSCALE;
+                    return cv::IMREAD_GRAYSCALE;
             }
             assert( false );
         } ();
@@ -415,7 +415,7 @@ struct SuperviselyReader::Impl
         const auto json = _it->path().parent_path() / fs::path{"../ann/"} /
                         ( _it->path().filename().replace_extension( ".png.json" ) );
 
-        frame = cv::imread( img.string(), CV_LOAD_IMAGE_UNCHANGED );
+        frame = cv::imread( img.string(), cv::IMREAD_UNCHANGED );
 
         if( ! frame.data )
         {
