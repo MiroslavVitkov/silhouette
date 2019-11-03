@@ -26,6 +26,7 @@ std::unique_ptr< cmd::Base > parse( int argc, Argv argv )
         "{cam c          |      | cam -> detect -> show}"
         "{dataset d      |      | Supervisely dataset -> detect -> show}"
         "{accuracy a     |      | Supervisely dataset -> detect -> calc accuracy}"
+        "{background b   |      | camera -> segment background}"
         ;
 
     cv::CommandLineParser parser( argc, argv, keys );
@@ -49,6 +50,12 @@ std::unique_ptr< cmd::Base > parse( int argc, Argv argv )
     {
         return std::make_unique< cmd::DatDetectSummarise >();
     }
+
+    if( parser.has( "background" ) )
+    {
+        return std::make_unique< cmd::SegmentBackground >();
+    }
+
 
     return help( parser );
 }

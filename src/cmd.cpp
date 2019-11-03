@@ -111,4 +111,22 @@ void DatDetectSummarise::execute()
 }
 
 
+void SegmentBackground::execute()
+{
+    io::Camera cam;
+    io::VideoPlayer player;
+    cv::Mat frame;
+
+    const auto bg = cv::createBackgroundSubtractorKNN();
+    //const auto bg = cv::createBackgroundSubtractorMOG2();
+    while( cam >> frame )
+    {
+        cv::Mat frame2;
+
+        bg->apply( frame, frame2 );
+        player << frame2;
+    }
+}
+
+
 }  // namespace cmd

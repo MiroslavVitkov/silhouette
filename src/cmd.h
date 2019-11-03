@@ -49,6 +49,13 @@ struct DatDetectSummarise : Base
 };
 
 
+// camera -> video
+struct SegmentBackground : Base
+{
+    void execute() override;
+};
+
+
 }  // namespace cmd
 
 
