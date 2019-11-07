@@ -1,6 +1,4 @@
 \documentclass{article}
-
-
 \usepackage[backend=bibtex, style=ieee]{biblatex}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -52,6 +50,15 @@ Horizontal and vertical derivatives are calculated with a centered mask (1 0 1).
 All generated values in the window are summarised into one tuple (direction, magnitude).
 This approach is believed to work better than the earlier Local Binary Patterns.
 
+\subsection{Cascade Classification}
+
+\subsection{SVM}
+
+\subsection{HAAR features}
+
+\subsection{Histogram of Oriented Gradients descriptor}
+The HOG image descriptor serves to encode image information in form of colour gradiant direction and magnitude.
+It is computed over a moving (multi-pixel) window, thus reduced the dimensinality.
 
 \section{Dataset}
 \subsection{What is out there}
@@ -76,8 +83,9 @@ It consists of 1 video of a single walking subject, totalling 49 seconds of foot
 
 
 \section{Foreground/Background Segmentation}
-The K-nearest neighbours - based Background/Foreground Segmentation algorithm is used \cite{knn_background_subt}.
-
+A Gaussian Mixture mode lof the background is generated\cite{knn_background_subt}.
+The model has a probability density function for each pixel separately.
+A pixel is considered to be 'background' if it is well predicted by the density function.
 
 \section{Method}
 
@@ -86,12 +94,36 @@ The K-nearest neighbours - based Background/Foreground Segmentation algorithm is
 \subsection{Measurement}
 A true detection is one where the predicted bounding box covers a ground truth box more than 50\%.
 
+% accuracy = tp / num predictions
+% recall = tp / all actual positive
+%total real: 1530, true_positives: 253, false positives: 1857 HOG accracy 253/1530, recall 253/1530
+%total real: 1530, true_positives: 110, false positives: 682 LBP
 \subsection{Detection}
-On the Supervisely Human Dataset, the detection accuraty is 12.0\% and the recall is 16.5\%.
+On the Supervisely Human Dataset, the detection accuraty is 12.0\% and the recall is 16.5\% for the HOG+CVM setup.
+The LBP performed at accuracy 12.8\%, recall 7.2\%.
+
+Here we can see how artificial edges confuse the HOG descriptor.
+\\
+\includegraphics[height=0.5\textheight]{../img/false-positives}
+\\
+Even when a positive example is in clear view, no method acheaved good results.
+\\
+\includegraphics[height=0.5\textheight]{../img/pedestrian}
+\\
 
 \subsection{Segmentation}
 The segmentation accuracy on the test video was close to 0\% due to inconsistent performance of the detector.
 This can probably be mitigated by looking at the video as a whole and demanding smooth movement of pedestrians.
+
+
+\section{Conclusion}
+The effort was twarted by the mediocre performance of the pedestrian detector.
+
+One considered approach was tracking detected humans between frames.
+It was not persued because of the sheer amount of false positives.
+
+A computational optimization was conceived but not implemented: use the background detector to provide attention for the detector.
+
 
 \printbibliography
 
