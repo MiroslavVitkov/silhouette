@@ -52,7 +52,7 @@ This approach is believed to work better than the earlier Local Binary Patterns.
 
 \subsection{Cascade Classification}
 Cascading is a type of ensemble learning.
-It means connecting several weak classifiers in series and useing all of the output data of one classifier as input to the next stage.
+It means connecting several weak classifiers in series and using all of the output data of one classifier as input to the next stage.
 The pioneer was the Viola–Jones object detection framework, which we are using in this project.
 
 
@@ -68,8 +68,8 @@ The key advantage of HAAR-like features is their constant-time estimation over a
 
 
 \subsection{Histogram of Oriented Gradients descriptor}
-The HOG image descriptor serves to encode image information in form of colour gradiant direction and magnitude.
-It is computed over a moving (multi-pixel) window, thus reduced the dimensinality.
+The HOG image descriptor serves to encode image information in form of colour gradient direction and magnitude.
+It is computed over a moving (multi-pixel) window, thus reduced the dimensionality.
 
 
 \section{Dataset}
@@ -79,18 +79,18 @@ Notable is the occlusion dataset\cite{datasets2}, providing experience close to 
 Also the AVA indoor dataset\cite{ava} consists of a large number (1200) single view videos.
 
 \subsection{What was chosen}
-The best siloutette segmentation dataset seems to be Supervisely's human dataset\cite{supervisely}. This is a sample from it:
+The best silhouette segmentation dataset seems to be Supervisely's human dataset\cite{supervisely}. This is a sample from it:
 \\
 \includegraphics[height=0.5\textwidth]{../img/supervisely}
 \\
-compare it to COCO's segmented siloutettes:
+compare it to COCO's segmented silhouettes:
 \\
 \includegraphics[height=0.5\textheight]{../img/coco}.
 
 \subsection{In addition to that}
-Segmenting silouettes by static images isn't feasible.
-To fasciliate the task, a dataset of videos was compiled.
-It is intented to fasciliate frame-to-frame adaptive background subtraction in preselected regions to generate the actual silouettes.
+Segmenting silhouettes by static images isn't feasible.
+To facilitate the task, a dataset of videos was compiled.
+It is intended to facilitate frame-to-frame adaptive background subtraction in preselected regions to generate the actual silhouettes.
 It consists of 1 video of a single walking subject, totalling 49 seconds of footage.
 
 
@@ -103,7 +103,7 @@ A pixel is considered to be 'background' if it is well predicted by the density 
 \section{Method}
 The RGB frame is scanned for pedestrians.
 If any are detected, the foreground/background model is consulted at those locations.
-It's output is the segmented silouhettes.
+It's output is the segmented silhouettes.
 
 
 \section{Results}
@@ -115,14 +115,14 @@ A true detection is one where the predicted bounding box covers a ground truth b
 %total real: 1530, true_positives: 253, false positives: 1857 HOG accracy 253/1530, recall 253/1530
 %total real: 1530, true_positives: 110, false positives: 682 LBP
 \subsection{Detection}
-On the Supervisely Human Dataset, the detection accuraty is 12.0\% and the recall is 16.5\% for the HOG+CVM setup.
+On the Supervisely Human Dataset, the detection accuracy is 12.0\% and the recall is 16.5\% for the HOG+SVM setup.
 The LBP performed at accuracy 12.8\%, recall 7.2\%.
 
 Here we can see how artificial edges confuse the HOG descriptor.
 \\
 \includegraphics[height=0.5\textheight]{../img/false-positives}
 \\
-Even when a positive example is in clear view, no method acheaved good results.
+Even when a positive example is in clear view, no method achieved good results.
 \\
 \includegraphics[height=0.5\textheight]{../img/pedestrian}
 \\
@@ -133,12 +133,12 @@ This can probably be mitigated by looking at the video as a whole and demanding 
 
 
 \section{Conclusion}
-The effort was twarted by the mediocre performance of the pedestrian detector.
+The effort was thwarted by the mediocre performance of the pedestrian detector.
 
 One considered approach was tracking detected humans between frames.
-It was not persued because of the sheer amount of false positives.
+It was not pursued because of the sheer amount of false positives.
 
-A computational optimization was conceived but not implemented: use the background detector to provide attention for the detector.
+A computational optimisation was conceived but not implemented: use the background detector to provide attention for the detector.
 
 
 \printbibliography
