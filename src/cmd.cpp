@@ -50,7 +50,7 @@ void DatDetectShow::execute()
     unsigned real{}, detected{};
     while( r >> frame )
     {
-        const auto det = algo::detect_pedestrians( frame );
+        const auto det = algo::detect_pedestrians( frame, algo::Detector::_LBP );
         io::draw_rects( frame, det, io::Colour::_red );
         detected += det.size();
 
@@ -80,7 +80,7 @@ void DatDetectSummarise::execute()
     unsigned real{}, true_positives{}, false_positives{};
     while( r >> frame )
     {
-        const auto det = algo::detect_pedestrians( frame );
+        const auto det = algo::detect_pedestrians( frame, algo::Detector::_LBP );
 
         const auto vs = r.get_last_silhouettes();
         const auto vb = [&] () { std::vector<cv::Rect> ret; for(const auto & s : vs){ret.push_back(s._box);} return ret; } ();

@@ -16,7 +16,13 @@ namespace algo
 {
 
 
-std::vector< cv::Rect > detect_pedestrians( const cv::Mat & frame );
+enum class Detector
+{
+    _LBP,
+    _HOGandSVM,
+};
+
+std::vector< cv::Rect > detect_pedestrians( const cv::Mat & frame, Detector );
 
 
 }  // namespace algo
