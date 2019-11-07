@@ -103,28 +103,42 @@ void DatDetectSummarise::execute()
             }
         }
         std::cout <<  "detected " << det.size() << " people out of " << vs.size() << std::endl;
+        if(vs.empty())
+        {
+            std::cout << "asdad";
+        }
     }
 
-    std::cout << "total real: " << real << ", true_positives: " << true_positives
-              << ", false positivesL " << false_positives;
+    std::cout << "total humans: " << real << ", true_positives: " << true_positives
+              << ", false positives: " << false_positives;
 
 }
 
 
 void SegmentBackground::execute()
 {
-    io::Camera cam;
-    io::VideoPlayer player;
+    //io::Camera cam;
+    io::VideoReader cam{ "me.mp4" };
+    io::VideoWriter vw( "detected.avi", cam.get_size() );
+    io::VideoPlayer player1{"detected"};
+    io::VideoPlayer player2{"segmented"};
     cv::Mat frame;
 
     const auto bg = cv::createBackgroundSubtractorKNN();
     //const auto bg = cv::createBackgroundSubtractorMOG2();
     while( cam >> frame )
     {
+        const auto det = algo::detect_pedestrians( frame, algo::Detector::_LBP );
+            io::draw_rects( frame, det);
+
         cv::Mat frame2;
 
         bg->apply( frame, frame2 );
-        player << frame2;
+        if(!det.empty())
+        {cv::Mat frame3( frame2, det[0] );
+        player2 << frame3;}
+        player1 << frame;
+        vw << frame;
     }
 }
 

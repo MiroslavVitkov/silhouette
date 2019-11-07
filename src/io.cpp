@@ -407,7 +407,7 @@ struct SuperviselyReader::Impl
         // is undefined behavior.
         if( _it == fs::end( _it ) )
         {
-            throw Exception{ "End of iteration of dataset." };
+            return * this;
         }
 
 
@@ -443,7 +443,7 @@ struct SuperviselyReader::Impl
     {
         const auto json = _it->path().parent_path() / fs::path{"../ann/"} /
                         ( _it->path().filename().replace_extension( ".png.json" ) );
-        return bitmap::read( json );
+        return bitmap::read( json.string() );
     }
 
 
