@@ -19,7 +19,7 @@
 Gait is a prominent biometric with similar importance to face recognition.
 It is feasible in the presence of heavy noise like darkness or low quality cameras.
 The input to the recogniser algorithm is usually a segmented and deshadowed human silhouette.
-This report presents an implementation of the segmentation step.
+This report presents an implementation\footnote{https://github.com/MiroslavVitkov/silhouette} of the segmentation step.
 We use Histogram of Oriented Gradients for dimensionality reduction and a Support Vector Machine for detection followed by approximate median filter for segmentation.
 \end{abstract}
 
@@ -62,7 +62,7 @@ At test time, samples are classified based on their geometric position relative 
 
 
 \subsection{HAAR-like features}
-Consider adjacent rectangular regions at a specific window, sum up the pixels inside each and form the difference.
+Consider adjacent rectangular regions at a specific window, sum up the pixel intensities inside each and form the difference.
 The individual classifiers are weak (i.e. slightly better than random chance).
 The key advantage of HAAR-like features is their constant-time estimation over an integral image representation.
 
@@ -88,18 +88,22 @@ compare it to COCO's segmented siloutettes:
 \includegraphics[height=0.5\textheight]{../img/coco}.
 
 \subsection{In addition to that}
-Segmenting silouettes by static images is increadibly difficult.
+Segmenting silouettes by static images isn't feasible.
 To fasciliate the task, a dataset of videos was compiled.
-It was expected to fasciliate frame-to-frame adaptive background subtraction in preselected regions to generate the actual silouettes.
+It is intented to fasciliate frame-to-frame adaptive background subtraction in preselected regions to generate the actual silouettes.
 It consists of 1 video of a single walking subject, totalling 49 seconds of footage.
 
 
 \section{Foreground/Background Segmentation}
-A Gaussian Mixture mode lof the background is generated\cite{knn_background_subt}.
+A Gaussian Mixture model of the background is generated\cite{knn_background_subt}.
 The model has a probability density function for each pixel separately.
 A pixel is considered to be 'background' if it is well predicted by the density function.
 
+
 \section{Method}
+The RGB frame is scanned for pedestrians.
+If any are detected, the foreground/background model is consulted at those locations.
+It's output is the segmented silouhettes.
 
 
 \section{Results}
