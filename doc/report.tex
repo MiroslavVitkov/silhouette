@@ -45,20 +45,32 @@ The difference is computed by sum of absolute difference (SAD) \cite{background}
 This allows the procedure to ignore periodic noise e.g waving tree leaves and low-frequency noise e.g. parked car or change of illumination level.
 
 The Histograms of Oriented Gradients (HOG)\cite{hog} descriptor encodes an an image's local colour gradients.
-It works in a sliding window or square or circular shape.
+It works in a sliding window of square or circular shape.
 Horizontal and vertical derivatives are calculated with a centered mask (1 0 1).
 All generated values in the window are summarised into one tuple (direction, magnitude).
 This approach is believed to work better than the earlier Local Binary Patterns.
 
 \subsection{Cascade Classification}
+Cascading is a type of ensemble learning.
+It means connecting several weak classifiers in series and useing all of the output data of one classifier as input to the next stage.
+The pioneer was the Viola–Jones object detection framework, which we are using in this project.
+
 
 \subsection{SVM}
+Support Vector Machine is a classification algorithm, which draws a hyperplane in between training samples.
+At test time, samples are classified based on their geometric position relative to the plane.
 
-\subsection{HAAR features}
+
+\subsection{HAAR-like features}
+Consider adjacent rectangular regions at a specific window, sum up the pixels inside each and form the difference.
+The individual classifiers are weak (i.e. slightly better than random chance).
+The key advantage of HAAR-like features is their constant-time estimation over an integral image representation.
+
 
 \subsection{Histogram of Oriented Gradients descriptor}
 The HOG image descriptor serves to encode image information in form of colour gradiant direction and magnitude.
 It is computed over a moving (multi-pixel) window, thus reduced the dimensinality.
+
 
 \section{Dataset}
 \subsection{What is out there}
