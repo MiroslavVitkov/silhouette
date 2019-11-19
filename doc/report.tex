@@ -101,6 +101,11 @@ The model has a probability density function for each pixel separately.
 A pixel is considered to be 'background' if it is well predicted by the density function.
 
 
+\section{Video Captioning}
+The detected silhouettes can be used for action detecion, velocity estimation, agent tracking.
+Once again due to the poor performace of the pedestrai detector, no satisfiable tracking was performed, foiling further efforts.
+
+
 \section{Method}
 The RGB frame is scanned for pedestrians.
 If any are detected, the foreground/background model is consulted at those locations.
